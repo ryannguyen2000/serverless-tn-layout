@@ -1,0 +1,27 @@
+{
+  "name": "webhook",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    "./controllers": "./controllers/index.js",
+    "./db": "./db/index.js",
+    "./middleware": "./middleware/index.js",
+    "./routes": "./routes/index.js"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongodb": "^6.10.0",
+    "socket.io": "^4.8.1",
+    "ws": "^8.18.0"
+  }
+}
