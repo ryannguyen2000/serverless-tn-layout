@@ -5,7 +5,9 @@ let db;
 export const connectToDb = async () => {
   if (!db) {
     try {
-      const client = await MongoClient.connect(process.env.MONGO_URI);
+      const client = await MongoClient.connect(process.env.MONGO_URI, {
+        ssl: true,
+      });
       console.log("Connected to MongoDB");
       db = client.db(process.env.DB_NAME);
     } catch (error) {
