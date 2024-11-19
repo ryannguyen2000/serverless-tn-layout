@@ -6,7 +6,10 @@ export const connectToDb = async () => {
   if (!db) {
     try {
       const client = await MongoClient.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
         ssl: true,
+        tls: true,
       });
       console.log("Connected to MongoDB");
       db = client.db(process.env.DB_NAME);
