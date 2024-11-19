@@ -54,7 +54,7 @@ app.post("/webhook", async (req, res) => {
   if (req.body) {
     // io.emit("webhook-data", req.body);
     const response = await axios.get(
-      `${req.body?.apiUrl}/v2/documents/search?ref=${req.body?.masterRef}&q=[[at(document.type,"homepage")]]`
+      `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
     );
     if (response) {
       io.emit(
