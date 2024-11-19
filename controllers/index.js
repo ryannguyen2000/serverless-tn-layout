@@ -204,6 +204,9 @@ const getDataLayoutsById = async (req, res) => {
   const {id} = req.params;
   try {
     await connectToDb();
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({error: "Invalid ObjectId format"});
+    }
     const data = await Layouts.findById(id);
     if (!data) {
       return res.status(404).json({error: "Document not found"});
