@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const connectToDb = async () => {
+export const connectToDb = async () => {
   try {
     // Check if mongoose is already connected to avoid redundant connections
     if (mongoose.connection.readyState === 1) {
@@ -22,5 +22,3 @@ const connectToDb = async () => {
     throw error; // Rethrow error for handling in your routes
   }
 };
-
-export default connectToDb;
