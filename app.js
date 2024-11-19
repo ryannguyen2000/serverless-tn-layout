@@ -52,10 +52,11 @@ app.post("/webhook", async (req, res) => {
   // console.log("Webhook received:", req.body);
 
   if (req.body) {
+    // io.emit("webhook-data", req.body);
     const response = await axios.get(
       `${req.body?.apiUrl}/v2/documents/search?ref=${req.body?.masterRef}&q=[[at(document.type,"homepage")]]`
     );
-    if (response.statusCode === 200 || response.statusCode === 201) {
+    if (response) {
       io.emit(
         "webhook-data",
         extractVariantAndId(response.data?.results[0]?.data?.slices)
