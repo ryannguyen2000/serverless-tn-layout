@@ -4,7 +4,7 @@ import {Layouts, Projects, Settings} from "../models/index.js";
 // Connect to MongoDB using Mongoose
 const connectToDb = async () => {
   if (mongoose.connections[0].readyState) {
-    return; // Already connected
+    return;
   }
 
   await mongoose.connect(process.env.MONGO_URI, {
@@ -30,6 +30,8 @@ const createLayoutsData = async (req, res) => {
   try {
     await connectToDb();
     const newLayout = new Layouts(req.body);
+    console.log(newLayout);
+
     const result = await newLayout.save();
     res.status(201).json({message: "Document created", id: result._id});
   } catch (error) {
@@ -164,6 +166,8 @@ const getAllLayoutsData = async (req, res) => {
   try {
     await connectToDb();
     const data = await Layouts.find();
+    console.log(data);
+
     res.json(data);
   } catch (error) {
     res
