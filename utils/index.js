@@ -6,6 +6,9 @@ export function extractVariantAndId(data) {
     rows: "1",
     colspan: "1",
     rowspan: "1",
+    gap: "1",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     type: "content",
   }));
 }
