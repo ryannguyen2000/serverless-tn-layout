@@ -14,7 +14,8 @@ const port = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: process.env.FE_HOST || process.env.FE_PORT_2,
+    origin:
+      process.env.FE_HOST || process.env.FE_PORT_2 || process.env.FE_HOST_3,
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -24,7 +25,8 @@ app.use(
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FE_HOST || process.env.FE_HOST_2,
+    origin:
+      process.env.FE_HOST || process.env.FE_HOST_2 || process.env.FE_HOST_3,
     methods: ["POST"],
     credentials: true,
   },
