@@ -1,42 +1,48 @@
 import mongoose from "mongoose";
 
-// Define Mongoose models
-const settingsSchema = new mongoose.Schema(
+const projectsSchema = new mongoose.Schema(
   {
-    repoHost: {type: String},
-    repoName: {type: String},
+    projectId: {type: String, required: true, unique: true},
+    projectName: {type: String, required: true},
+    projectUrl: {type: String, required: true},
+    websiteUrl: {type: String, required: true},
   },
   {timestamps: true}
 );
 
-const layoutsSchema = new mongoose.Schema(
+const documentsSchema = new mongoose.Schema(
   {
-    documentId: {type: String},
+    projectId: {type: String, required: true, ref: "Projects"},
+    documentId: {type: String, required: true, unique: true},
+    documentName: {type: String, required: true},
     layoutJson: {
       type: mongoose.Schema.Types.Mixed,
     },
-    repoName: {
-      type: String,
-    },
   },
   {timestamps: true}
 );
 
-const projectsSchema = new mongoose.Schema(
+const sliceSchema = new mongoose.Schema({
+  sliceId: {type: String, required: true, unique: true},
+  thumnail: {type: String, required: true},
+  detail: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+  },
+});
+
+const slicesSchema = new mongoose.Schema(
   {
-    projectId: {
-      type: String,
-    },
-    projectName: {
-      type: String,
-    },
+    projectId: {type: String, required: true, ref: "Projects"},
+    documentId: {type: String, required: true, ref: "Documents"},
+    slices: {type: [sliceSchema], required: true},
   },
   {timestamps: true}
 );
 
-// Create Mongoose models
-const Settings = mongoose.model("Settings", settingsSchema);
-const Layouts = mongoose.model("Layouts", layoutsSchema);
+const Documents = mongoose.model("Documents", documentsSchema);
 const Projects = mongoose.model("Projects", projectsSchema);
+const Slices = mongoose.model("Slices", slicesSchema);
+const Slice = mongoose.model("Slice", sliceSchema);
 
-export {Layouts, Projects, Settings};
+export {Documents, Projects, Slices, Slice};

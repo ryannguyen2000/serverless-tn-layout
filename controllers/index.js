@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import {Layouts, Projects, Settings} from "../models/index.js";
+import {Documents, Projects, Slice, Slices} from "../models/index.js";
 
-// Connect to MongoDB using Mongoose
+// Connect to MongoDB using Mongoose ===================================================================================================================================
 const connectToDb = async () => {
   if (mongoose.connections[0].readyState) {
     return;
@@ -13,52 +13,126 @@ const connectToDb = async () => {
   });
 };
 
-const createSettingsData = async (req, res) => {
+// create =============================================================================================================================================================
+
+const createSlice = async (req, res) => {
   try {
     await connectToDb();
-    const newSettings = new Settings(req.body);
-    const result = await newSettings.save();
-    res.status(201).json({message: "Document created", id: result._id});
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const newSlice = new Slice(req.body);
+    const result = await newSlice.save();
+    res.status(201).json({message: "Slice created", id: result.sliceId});
+  } catch (error) {
+    res
+      .status(500)
+      .json({error: "Failed to create slice", details: error.message});
+  }
+};
+
+const createSlices = async (req, res) => {
+  try {
+    await connectToDb();
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const newSlices = new Slices(req.body);
+
+    const result = await newSlices.save();
+    res.status(201).json({message: "Slices created", id: result._id});
+  } catch (error) {
+    res
+      .status(500)
+      .json({error: "Failed to create slices", details: error.message});
+  }
+};
+
+const createDocument = async (req, res) => {
+  try {
+    await connectToDb();
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const newDocument = new Documents(req.body);
+    const result = await newDocument.save();
+    res.status(201).json({message: "Document created", id: result.documentId});
   } catch (error) {
     res
       .status(500)
       .json({error: "Failed to create document", details: error.message});
   }
 };
-
-const createLayoutsData = async (req, res) => {
+const createProject = async (req, res) => {
   try {
     await connectToDb();
-    const newLayout = new Layouts(req.body);
-    console.log(newLayout);
-
-    const result = await newLayout.save();
-    res.status(201).json({message: "Document created", id: result._id});
-  } catch (error) {
-    res
-      .status(500)
-      .json({error: "Failed to create document", details: error.message});
-  }
-};
-
-const createProjectsData = async (req, res) => {
-  try {
-    await connectToDb();
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
     const newProject = new Projects(req.body);
     const result = await newProject.save();
-    res.status(201).json({message: "Document created", id: result._id});
+    res.status(201).json({message: "Project created", id: result.projectId});
   } catch (error) {
     res
       .status(500)
-      .json({error: "Failed to create document", details: error.message});
+      .json({error: "Failed to create project", details: error.message});
   }
 };
 
-const updateSettingsData = async (req, res) => {
-  const {id} = req.params;
+// update ===========================================================================================================================================================
+
+const updateSlice = async (req, res) => {
+  const {id} = req.body;
   try {
     await connectToDb();
-    const result = await Settings.updateOne({_id: id}, {$set: req.body});
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const result = await Slice.updateOne({sliceId: id}, {$set: req.body});
+    if (result.matchedCount === 0) {
+      return res.status(404).json({error: "Slice not found"});
+    }
+    res.json({message: "Slice updated"});
+  } catch (error) {
+    res
+      .status(500)
+      .json({error: "Failed to update slice", details: error.message});
+  }
+};
+
+const updateSlices = async (req, res) => {
+  const {projectId, documentId} = req.body;
+  try {
+    await connectToDb();
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const result = await Layouts.updateOne(
+      {projectId: projectId, documentId: documentId},
+      {$set: req.body}
+    );
+    if (result.matchedCount === 0) {
+      return res.status(404).json({error: "Slices not found"});
+    }
+    res.json({message: "Slices updated"});
+  } catch (error) {
+    res
+      .status(500)
+      .json({error: "Failed to update slices", details: error.message});
+  }
+};
+
+const updateDocument = async (req, res) => {
+  const {id} = req.body;
+  try {
+    await connectToDb();
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const result = await Documents.updateOne(
+      {documentId: id},
+      {$set: req.body}
+    );
     if (result.matchedCount === 0) {
       return res.status(404).json({error: "Document not found"});
     }
@@ -69,44 +143,75 @@ const updateSettingsData = async (req, res) => {
       .json({error: "Failed to update document", details: error.message});
   }
 };
-
-const updateLayoutsData = async (req, res) => {
-  const {id} = req.params;
+const updateProject = async (req, res) => {
+  const {id} = req.body;
   try {
     await connectToDb();
-    const result = await Layouts.updateOne({_id: id}, {$set: req.body});
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const result = await Projects.updateOne({projectId: id}, {$set: req.body});
     if (result.matchedCount === 0) {
-      return res.status(404).json({error: "Document not found"});
+      return res.status(404).json({error: "Project not found"});
     }
-    res.json({message: "Document updated"});
+    res.json({message: "Project updated"});
   } catch (error) {
     res
       .status(500)
-      .json({error: "Failed to update document", details: error.message});
+      .json({error: "Failed to update project", details: error.message});
   }
 };
+// delete ==================================================================================================================================================
 
-const updateProjectsData = async (req, res) => {
-  const {id} = req.params;
+const deleteSlice = async (req, res) => {
+  const {id} = req.body;
   try {
     await connectToDb();
-    const result = await Projects.updateOne({_id: id}, {$set: req.body});
-    if (result.matchedCount === 0) {
-      return res.status(404).json({error: "Document not found"});
+    if (!req.params) {
+      return res.status(400).json({error: "Invalid request body"});
     }
-    res.json({message: "Document updated"});
+    const result = await Slice.deleteOne({sliceId: id});
+    if (result.deletedCount === 0) {
+      return res.status(404).json({error: "Slice not found"});
+    }
+    res.json({message: "Slice deleted"});
   } catch (error) {
     res
       .status(500)
-      .json({error: "Failed to update document", details: error.message});
+      .json({error: "Failed to delete slice", details: error.message});
   }
 };
 
-const deleteSettingsData = async (req, res) => {
-  const {id} = req.params;
+const deleteSlices = async (req, res) => {
+  const {projectId, documentId} = req.body;
   try {
     await connectToDb();
-    const result = await Settings.deleteOne({_id: id});
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const result = await Slices.deleteOne({
+      projectId: projectId,
+      documentId: documentId,
+    });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({error: "Slices not found"});
+    }
+    res.json({message: "Slices deleted"});
+  } catch (error) {
+    res
+      .status(500)
+      .json({error: "Failed to delete slices", details: error.message});
+  }
+};
+
+const deleteDocument = async (req, res) => {
+  const {id} = req.body;
+  try {
+    await connectToDb();
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const result = await Documents.deleteOne({documentId: id});
     if (result.deletedCount === 0) {
       return res.status(404).json({error: "Document not found"});
     }
@@ -117,43 +222,50 @@ const deleteSettingsData = async (req, res) => {
       .json({error: "Failed to delete document", details: error.message});
   }
 };
-
-const deleteLayoutsData = async (req, res) => {
-  const {id} = req.params;
+const deleteProject = async (req, res) => {
+  const {id} = req.body;
   try {
     await connectToDb();
-    const result = await Layouts.deleteOne({_id: id});
-    if (result.deletedCount === 0) {
-      return res.status(404).json({error: "Document not found"});
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
     }
-    res.json({message: "Document deleted"});
+    const result = await Projects.deleteOne({projectId: id});
+    if (result.deletedCount === 0) {
+      return res.status(404).json({error: "Project not found"});
+    }
+    res.json({message: "Project deleted"});
   } catch (error) {
     res
       .status(500)
-      .json({error: "Failed to delete document", details: error.message});
+      .json({error: "Failed to delete project", details: error.message});
   }
 };
-
-const deleteProjectsData = async (req, res) => {
-  const {id} = req.params;
+//  get ==================================================================================================================================================
+const getSlice = async (req, res) => {
+  const {id} = req.query;
   try {
     await connectToDb();
-    const result = await Projects.deleteOne({_id: id});
-    if (result.deletedCount === 0) {
-      return res.status(404).json({error: "Document not found"});
+    if (id) {
+      const data = await Slice.findOne({sliceId: id});
+      res.json(data);
     }
-    res.json({message: "Document deleted"});
+    const data = await Slice.find();
+    res.json(data);
   } catch (error) {
     res
       .status(500)
-      .json({error: "Failed to delete document", details: error.message});
+      .json({error: "Failed to fetch data", details: error.message});
   }
 };
-
-const getAllSettingsData = async (req, res) => {
+const getSlices = async (req, res) => {
+  const {pId, dId} = req.query;
   try {
     await connectToDb();
-    const data = await Settings.find();
+    if (pId && dId) {
+      const data = await Slices.findOne({projectId: pId, documentId: dId});
+      res.json(data);
+    }
+    const data = await Slices.find();
     res.json(data);
   } catch (error) {
     res
@@ -162,12 +274,15 @@ const getAllSettingsData = async (req, res) => {
   }
 };
 
-const getAllLayoutsData = async (req, res) => {
+const getDocument = async (req, res) => {
+  const {id} = req.query;
   try {
     await connectToDb();
-    const data = await Layouts.find();
-    console.log(data);
-
+    if (id) {
+      const data = await Documents.findOne({documentId: id});
+      res.json(data);
+    }
+    const data = await Documents.find();
     res.json(data);
   } catch (error) {
     res
@@ -176,9 +291,14 @@ const getAllLayoutsData = async (req, res) => {
   }
 };
 
-const getAllProjectsData = async (req, res) => {
+const getProject = async (req, res) => {
+  const {id} = req.query;
   try {
     await connectToDb();
+    if (id) {
+      const data = await Projects.findOne({projectId: id});
+      res.json(data);
+    }
     const data = await Projects.find();
     res.json(data);
   } catch (error) {
@@ -188,71 +308,21 @@ const getAllProjectsData = async (req, res) => {
   }
 };
 
-const getDataSettingsById = async (req, res) => {
-  const {id} = req.params;
-  try {
-    await connectToDb();
-    const data = await Settings.findById(id);
-    if (!data) {
-      return res.status(404).json({error: "Document not found"});
-    }
-    res.json(data);
-  } catch (error) {
-    res
-      .status(500)
-      .json({error: "Failed to fetch document", details: error.message});
-  }
-};
-
-const getDataLayoutsById = async (req, res) => {
-  const {id} = req.params;
-  try {
-    await connectToDb();
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({error: "Invalid ObjectId format"});
-    }
-    const data = await Layouts.findById(id);
-    if (!data) {
-      return res.status(404).json({error: "Document not found"});
-    }
-    res.json(data);
-  } catch (error) {
-    res
-      .status(500)
-      .json({error: "Failed to fetch document", details: error.message});
-  }
-};
-
-const getDataProjectsById = async (req, res) => {
-  const {id} = req.params;
-  try {
-    await connectToDb();
-    const data = await Projects.findById(id);
-    if (!data) {
-      return res.status(404).json({error: "Document not found"});
-    }
-    res.json(data);
-  } catch (error) {
-    res
-      .status(500)
-      .json({error: "Failed to fetch document", details: error.message});
-  }
-};
-
 export {
-  createSettingsData,
-  createLayoutsData,
-  createProjectsData,
-  updateSettingsData,
-  updateLayoutsData,
-  updateProjectsData,
-  deleteSettingsData,
-  deleteLayoutsData,
-  deleteProjectsData,
-  getAllSettingsData,
-  getAllLayoutsData,
-  getAllProjectsData,
-  getDataSettingsById,
-  getDataLayoutsById,
-  getDataProjectsById,
+  createSlice,
+  createSlices,
+  createDocument,
+  createProject,
+  updateSlice,
+  updateSlices,
+  updateDocument,
+  updateProject,
+  deleteSlice,
+  deleteSlices,
+  deleteDocument,
+  deleteProject,
+  getSlice,
+  getSlices,
+  getDocument,
+  getProject,
 };

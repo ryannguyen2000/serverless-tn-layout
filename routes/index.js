@@ -1,43 +1,45 @@
 import express from "express";
 import {
-  createLayoutsData,
-  createProjectsData,
-  createSettingsData,
-  deleteLayoutsData,
-  deleteProjectsData,
-  deleteSettingsData,
-  getAllLayoutsData,
-  getAllProjectsData,
-  getAllSettingsData,
-  getDataLayoutsById,
-  getDataProjectsById,
-  getDataSettingsById,
-  updateLayoutsData,
-  updateProjectsData,
-  updateSettingsData,
+  createDocument,
+  createProject,
+  createSlice,
+  createSlices,
+  deleteDocument,
+  deleteProject,
+  deleteSlice,
+  deleteSlices,
+  getDocument,
+  getProject,
+  getSlice,
+  getSlices,
+  updateDocument,
+  updateProject,
+  updateSlice,
+  updateSlices,
 } from "../controllers/index.js";
 
 export const router = express.Router();
 
 // get routes
-router.get("/settings", getAllSettingsData);
-router.get("/settings/:id", getDataSettingsById);
-router.get("/layouts", getAllLayoutsData);
-router.get("/layouts/:id", getDataLayoutsById);
-router.get("/projects", getAllProjectsData);
-router.get("/projects/:id", getDataProjectsById);
+router.get("/slice", getSlice);
+router.get("/slices", getSlices);
+router.get("/documents", getDocument);
+router.get("/projects", getProject);
 
 // create routes
-router.post("/settings", createSettingsData);
-router.post("/layouts", createLayoutsData);
-router.post("/projects", createProjectsData);
+router.post("/slice", createSlice);
+router.post("/slices", createSlices);
+router.post("/documents", createDocument);
+router.post("/projects", createProject);
 
 // update routes
-router.put("/settings/:id", updateSettingsData);
-router.put("/layouts/:id", updateLayoutsData);
-router.put("/projects/:id", updateProjectsData);
+router.put("/slice", updateSlice);
+router.put("/slices", updateSlices);
+router.put("/documents", updateDocument);
+router.put("/projects", updateProject);
 
 // delete routes
-router.delete("/settings/:id", deleteSettingsData);
-router.delete("/layouts/:id", deleteLayoutsData);
-router.delete("/projects/:id", deleteProjectsData);
+router.delete("/slice", deleteSlice);
+router.delete("/slices", deleteSlices);
+router.delete("/documents", deleteDocument);
+router.delete("/projects", deleteProject);
