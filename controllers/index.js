@@ -241,7 +241,7 @@ const deleteDocument = async (req, res) => {
   const {id} = req.params;
   try {
     await connectToDb();
-    if (!req.params) {
+    if (!id) {
       return res.status(400).json({error: "Invalid request body"});
     }
     const result = await Documents.deleteOne({documentId: id});
@@ -259,9 +259,7 @@ const deleteProject = async (req, res) => {
   const {id} = req.params;
   try {
     await connectToDb();
-    console.log("ashdbasld  ----", id);
-
-    if (!req.params) {
+    if (!id) {
       return res.status(400).json({error: "Invalid request body"});
     }
     const result = await Projects.deleteOne({projectId: id});
