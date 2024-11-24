@@ -7,6 +7,9 @@ import cors from "cors";
 import {router} from "./routes/index.js";
 import {extractVariantAndId} from "./utils/index.js";
 import axios from "axios";
+import multer from "multer";
+import path from "path";
+import {v6} from "uuid";
 dotenv.config();
 
 const app = express();
@@ -20,7 +23,6 @@ app.use(
   })
 );
 
-// Khởi tạo HTTP server và Socket.IO
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -29,6 +31,25 @@ const io = new Server(server, {
     credentials: true,
   },
 });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const extname = path.extname(file.originalname);
+    const filename = v6() + extname;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({storage: storage});
+
+import fs from "fs";
+const uploadDir = "./uploads";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
 app.use(bodyParser.json());
 
@@ -48,11 +69,18 @@ io.on("connection", (socket) => {
   });
 });
 
-app.post("/webhook", async (req, res) => {
-  // console.log("Webhook received:", req.body);
+app.post("/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No image file uploaded");
+  }
 
+  const imageUrl = `https://serverless-tn-layout-production.up.railway.app/uploads/${req.file.filename}`;
+  res.send({imageUrl});
+});
+app.use("/uploads", express.static("uploads"));
+
+app.post("/webhook", async (req, res) => {
   if (req.body) {
-    // io.emit("webhook-data", req.body);
     const response = await axios.get(
       `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
     );
