@@ -39,7 +39,7 @@ router.put("/documents", updateDocument);
 router.put("/projects", updateProject);
 
 // delete routes
-router.delete("/slice", deleteSlice);
-router.delete("/slices", deleteSlices);
-router.delete("/documents", deleteDocument);
-router.delete("/projects", deleteProject);
+router.delete("/slice/:id", deleteSlice);
+router.delete("/slices/:projectId/:documentId", deleteSlices);
+router.delete("/documents/:id", deleteDocument);
+router.delete("/projects/:id", deleteProject);
