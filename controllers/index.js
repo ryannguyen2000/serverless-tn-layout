@@ -219,7 +219,7 @@ const deleteSlices = async (req, res) => {
   const {projectId, documentId} = req.params;
   try {
     await connectToDb();
-    if (!req.body) {
+    if (!req.params) {
       return res.status(400).json({error: "Invalid request body"});
     }
     const result = await Slices.deleteOne({
@@ -241,7 +241,7 @@ const deleteDocument = async (req, res) => {
   const {id} = req.params;
   try {
     await connectToDb();
-    if (!req.body) {
+    if (!req.params) {
       return res.status(400).json({error: "Invalid request body"});
     }
     const result = await Documents.deleteOne({documentId: id});
@@ -259,7 +259,7 @@ const deleteProject = async (req, res) => {
   const {id} = req.params;
   try {
     await connectToDb();
-    if (!req.body) {
+    if (!req.params) {
       return res.status(400).json({error: "Invalid request body"});
     }
     const result = await Projects.deleteOne({projectId: id});
