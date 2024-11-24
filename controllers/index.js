@@ -259,6 +259,8 @@ const deleteProject = async (req, res) => {
   const {id} = req.params;
   try {
     await connectToDb();
+    console.log("ashdbasld  ----", id);
+
     if (!req.params) {
       return res.status(400).json({error: "Invalid request body"});
     }
