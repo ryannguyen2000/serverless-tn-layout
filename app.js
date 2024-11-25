@@ -88,21 +88,21 @@ app.post("/upload", async (req, res) => {
 });
 
 app.post("/webhook-page", async (req, res) => {
-  console.log(req);
+  console.log(req.body);
   try {
-    if (req.body) {
-      const response = await axios.get(
-        `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
-      );
-      if (response) {
-        console.log(JSON.stringify(response));
+    // if (req.body) {
+    //   const response = await axios.get(
+    //     `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
+    //   );
+    //   if (response) {
+    //     console.log(JSON.stringify(response));
 
-        // io.emit(
-        //   "webhook-data",
-        //   extractVariantAndId(response.data?.results[0]?.data?.slices)
-        // );
-      }
-    }
+    //     // io.emit(
+    //     //   "webhook-data",
+    //     //   extractVariantAndId(response.data?.results[0]?.data?.slices)
+    //     // );
+    //   }
+    // }
     res.status(200).send("Webhook received and broadcasted");
   } catch (error) {
     console.error(error);
