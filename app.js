@@ -10,10 +10,13 @@ import axios from "axios";
 import multer from "multer";
 import path from "path";
 import {v6} from "uuid";
+import {v2 as cloudinary} from "cloudinary";
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const base64Regex =
+  /^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,([A-Za-z0-9+/=]+)$/;
 
 app.use(
   cors({
@@ -32,26 +35,13 @@ const io = new Server(server, {
   },
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const extname = path.extname(file.originalname);
-    const filename = v6() + extname;
-    cb(null, filename);
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const upload = multer({storage: storage});
-
-import fs from "fs";
-const uploadDir = "./uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: "10mb"}));
 
 app.use("/api", router);
 
@@ -69,15 +59,35 @@ io.on("connection", (socket) => {
   });
 });
 
-app.post("/upload", upload.single("image"), (req, res) => {
-  if (!req.file) {
+app.post("/upload", async (req, res) => {
+  const {image} = req.body;
+  if (!image) {
     return res.status(400).send("No image file uploaded");
   }
 
-  const imageUrl = `https://serverless-tn-layout-production.up.railway.app/uploads/${req.file.filename}`;
-  res.send({imageUrl});
+  if (!base64Regex.test(image)) {
+    return res
+      .status(400)
+      .json({
+        error:
+          "Invalid image format. Its must be start 'data:image...' and allow for png,jpeg,jpg,gif,bmp or webp",
+      });
+  }
+
+  try {
+    const result = await cloudinary.uploader.upload(image, {
+      folder: "uploads",
+    });
+
+    res.json({
+      message: "Image uploaded successfully",
+      imageUrl: result.secure_url,
+    });
+    res.send({imageUrl});
+  } catch (error) {
+    res.send({error: error.message});
+  }
 });
-app.use("/uploads", express.static("uploads"));
 
 app.post("/webhook", async (req, res) => {
   if (req.body) {
