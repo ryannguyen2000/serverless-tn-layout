@@ -88,13 +88,14 @@ app.post("/upload", async (req, res) => {
 });
 
 app.post("/webhook-page", async (req, res) => {
+  console.log(req);
   try {
     if (req.body) {
-      // const response = await axios.get(
-      //   `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
-      // );
-      if (req.body) {
-        console.log(JSON.stringify(req.body));
+      const response = await axios.get(
+        `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
+      );
+      if (response) {
+        console.log(JSON.stringify(response));
 
         // io.emit(
         //   "webhook-data",
@@ -114,7 +115,7 @@ app.post("/webhook-homepage", async (req, res) => {
         `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
       );
       if (response) {
-        console.log(JSON.stringify(req.body));
+        console.log(JSON.stringify(req));
 
         // io.emit(
         //   "webhook-data",
