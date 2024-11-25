@@ -90,9 +90,9 @@ app.post("/upload", async (req, res) => {
 app.post("/webhook-page", async (req, res) => {
   try {
     if (req.body) {
-      const response = await axios.get(
-        `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
-      );
+      // const response = await axios.get(
+      //   `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
+      // );
       if (response) {
         console.log(JSON.stringify(response));
 
@@ -114,7 +114,7 @@ app.post("/webhook-homepage", async (req, res) => {
         `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
       );
       if (response) {
-        console.log(JSON.stringify(response));
+        console.log(JSON.stringify(req.body));
 
         // io.emit(
         //   "webhook-data",
