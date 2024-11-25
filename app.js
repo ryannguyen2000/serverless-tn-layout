@@ -94,16 +94,15 @@ app.post("/webhook-page", async (req, res) => {
     const response = await axios.get(
       `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
     );
-    console.log("log: " + response.data);
 
-    //   if (response) {
-    //     console.log(JSON.stringify(response));
+    if (response.status === 200 || response.status === 201) {
+      console.log(JSON.stringify(response.data));
 
-    //     // io.emit(
-    //     //   "webhook-data",
-    //     //   extractVariantAndId(response.data?.results[0]?.data?.slices)
-    //     // );
-    //   }
+      // io.emit(
+      //   "webhook-data",
+      //   extractVariantAndId(response.data?.results[0]?.data?.slices)
+      // );
+    }
     // }
     res.status(200).send("Webhook received and broadcasted");
   } catch (error) {
