@@ -91,9 +91,11 @@ app.post("/webhook-page", async (req, res) => {
   console.log(req.body);
   try {
     // if (req.body) {
-    //   const response = await axios.get(
-    //     `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
-    //   );
+    const response = await axios.get(
+      `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
+    );
+    console.log("log: " + response.data);
+
     //   if (response) {
     //     console.log(JSON.stringify(response));
 
