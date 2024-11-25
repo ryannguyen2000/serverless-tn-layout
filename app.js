@@ -48,11 +48,11 @@ app.use("/api", router);
 let connectedClients = [];
 
 io.on("connection", (socket) => {
-  console.log(`Client connected: ${socket.id}`);
+  console.log(`Socket connected`);
   connectedClients.push(socket);
 
   socket.on("disconnect", () => {
-    console.log(`Client disconnected: ${socket.id}`);
+    console.log(`Socket disconnected`);
     connectedClients = connectedClients.filter(
       (client) => client.id !== socket.id
     );
@@ -95,14 +95,12 @@ app.post("/webhook-page", async (req, res) => {
       `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
     );
 
-    if (response.status === 200 || response.status === 201) {
-      console.log(JSON.stringify(response.data));
+    console.log(JSON.stringify(response.data));
 
-      // io.emit(
-      //   "webhook-data",
-      //   extractVariantAndId(response.data?.results[0]?.data?.slices)
-      // );
-    }
+    // io.emit(
+    //   "webhook-data",
+    //   extractVariantAndId(response.data?.results[0]?.data?.slices)
+    // );
     // }
     res.status(200).send("Webhook received and broadcasted");
   } catch (error) {
