@@ -88,49 +88,63 @@ app.post("/upload", async (req, res) => {
 });
 
 app.post("/webhook-page", async (req, res) => {
-  if (req.body) {
-    const response = await axios.get(
-      `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
-    );
-    if (response) {
-      console.log(JSON.stringify(response));
+  try {
+    if (req.body) {
+      const response = await axios.get(
+        `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
+      );
+      if (response) {
+        console.log(JSON.stringify(response));
 
-      // io.emit(
-      //   "webhook-data",
-      //   extractVariantAndId(response.data?.results[0]?.data?.slices)
-      // );
+        // io.emit(
+        //   "webhook-data",
+        //   extractVariantAndId(response.data?.results[0]?.data?.slices)
+        // );
+      }
     }
+    res.status(200).send("Webhook received and broadcasted");
+  } catch (error) {
+    console.error(error);
   }
 });
 app.post("/webhook-homepage", async (req, res) => {
-  if (req.body) {
-    const response = await axios.get(
-      `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
-    );
-    if (response) {
-      console.log(JSON.stringify(response));
+  try {
+    if (req.body) {
+      const response = await axios.get(
+        `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
+      );
+      if (response) {
+        console.log(JSON.stringify(response));
 
-      // io.emit(
-      //   "webhook-data",
-      //   extractVariantAndId(response.data?.results[0]?.data?.slices)
-      // );
+        // io.emit(
+        //   "webhook-data",
+        //   extractVariantAndId(response.data?.results[0]?.data?.slices)
+        // );
+      }
     }
+    res.status(200).send("Webhook received and broadcasted");
+  } catch (error) {
+    console.error(error);
   }
 });
 app.post("/webhook", async (req, res) => {
-  if (req.body) {
-    const response = await axios.get(
-      `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
-    );
-    if (response) {
-      io.emit(
-        "webhook-data",
-        extractVariantAndId(response.data?.results[0]?.data?.slices)
+  try {
+    if (req.body) {
+      const response = await axios.get(
+        `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"homepage")]]`
       );
+      if (response) {
+        io.emit(
+          "webhook-data",
+          extractVariantAndId(response.data?.results[0]?.data?.slices)
+        );
+      }
     }
-  }
 
-  res.status(200).send("Webhook received and broadcasted");
+    res.status(200).send("Webhook received and broadcasted");
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 app.post("/publish", (req, res) => {
