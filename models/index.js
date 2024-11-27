@@ -24,8 +24,10 @@ const documentsSchema = new mongoose.Schema(
   {timestamps: true}
 );
 
-const sliceSchema = new mongoose.Schema({
+const slicesSchema = new mongoose.Schema({
   sliceId: {type: String, required: true, unique: true},
+  projectId: {type: String, required: true, ref: "Projects"},
+  documentId: {type: String, required: true, ref: "Documents"},
   thumnail: {type: String, required: true},
   detail: {
     type: mongoose.Schema.Types.Mixed,
@@ -33,18 +35,8 @@ const sliceSchema = new mongoose.Schema({
   },
 });
 
-const slicesSchema = new mongoose.Schema(
-  {
-    projectId: {type: String, required: true, ref: "Projects"},
-    documentId: {type: String, required: true, ref: "Documents"},
-    slices: {type: [sliceSchema], required: true},
-  },
-  {timestamps: true}
-);
-
 const Documents = mongoose.model("Documents", documentsSchema);
 const Projects = mongoose.model("Projects", projectsSchema);
 const Slices = mongoose.model("Slices", slicesSchema);
-const Slice = mongoose.model("Slice", sliceSchema);
 
-export {Documents, Projects, Slices, Slice};
+export {Documents, Projects, Slices};

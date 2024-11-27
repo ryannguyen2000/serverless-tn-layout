@@ -10,7 +10,8 @@
     "./routes": "./routes/index.js"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "mongoose": "^8.8.2",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
+    "nodemon": "^3.1.7",
     "socket.io": "^4.8.1",
     "uuid": "^11.0.3",
     "ws": "^8.18.0"
