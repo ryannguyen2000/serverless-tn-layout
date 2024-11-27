@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import {Documents, Projects, Slices} from "../models/index.js";
 import {v2 as cloudinary} from "cloudinary";
-import {isArray} from "chart.js/helpers";
 import axios from "axios";
 import {
   extractVariantAndId,
