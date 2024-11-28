@@ -38,4 +38,4 @@ router.delete("/documents/:id", deleteDocument);
 router.delete("/projects/:id", deleteProject);
 
 // image upload
-router.delete("/upload", uploadImage);
+router.post("/upload", uploadImage);
