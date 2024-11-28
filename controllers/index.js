@@ -421,6 +421,7 @@ const webhookPublishTypePage = async (req, res) => {
               const sliceExist = await Slices.findOne({
                 slideId: sl?.id,
                 documentId: doc?.id,
+                projectId: req.body.domain,
               });
 
               if (!sliceExist) {
