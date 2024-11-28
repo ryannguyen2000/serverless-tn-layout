@@ -19,6 +19,7 @@ const documentsSchema = new mongoose.Schema(
     thumnail: {type: String, required: true},
     layoutJson: {
       type: mongoose.Schema.Types.Mixed,
+      required: true,
     },
   },
   {timestamps: true}
