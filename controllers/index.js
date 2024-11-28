@@ -191,14 +191,14 @@ const updateSlices = async (req, res) => {
 };
 
 const updateDocument = async (req, res) => {
-  const {projectId, documentId} = req.body;
+  const {projectId, documentId, dataJson} = req.body;
   try {
     await connectToDb();
     if (!req.body) {
       return res.status(400).json({error: "Invalid request body"});
     }
     const result = await Documents.updateOne(
-      {documentId: dId, projectId: pId},
+      {documentId: documentId, projectId: projectId},
       {
         $set: {
           layoutJson: dataJson,
