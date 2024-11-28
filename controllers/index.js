@@ -191,15 +191,19 @@ const updateSlices = async (req, res) => {
 };
 
 const updateDocument = async (req, res) => {
-  const {id} = req.body;
+  const {projectId, documentId} = req.body;
   try {
     await connectToDb();
     if (!req.body) {
       return res.status(400).json({error: "Invalid request body"});
     }
     const result = await Documents.updateOne(
-      {documentId: id},
-      {$set: req.body}
+      {documentId: dId, projectId: pId},
+      {
+        $set: {
+          layoutJson: dataJson,
+        },
+      }
     );
     if (result.matchedCount === 0) {
       return res.status(404).json({error: "Document not found"});
