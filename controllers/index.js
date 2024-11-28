@@ -191,7 +191,7 @@ const updateSlices = async (req, res) => {
 };
 
 const updateDocument = async (req, res) => {
-  const {projectId, documentId, dataJson} = req.body;
+  const {projectId, documentId} = req.body;
   try {
     await connectToDb();
     if (!req.body) {
@@ -200,9 +200,7 @@ const updateDocument = async (req, res) => {
     const result = await Documents.updateOne(
       {documentId: documentId, projectId: projectId},
       {
-        $set: {
-          layoutJson: dataJson,
-        },
+        $set: req.body,
       }
     );
     if (result.matchedCount === 0) {
