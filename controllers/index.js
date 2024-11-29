@@ -325,16 +325,14 @@ const getSlices = async (req, res) => {
 };
 
 const getDocument = async (req, res) => {
-  const {id, pId} = req.query;
+  const {dId, pId} = req.query;
   try {
     await connectToDb();
-    if (id) {
-      const data = await Documents.findOne({documentId: id}).populate(
-        "projectId"
-      );
+    if (dId && !pId) {
+      const data = await Documents.findOne({documentId: dId});
       return res.json(data);
     }
-    if (pId) {
+    if (!dId && pId) {
       const data = await Documents.find({projectId: pId}).populate("projectId");
       return res.json(data);
     }
@@ -408,49 +406,51 @@ const webhookPublishTypePage = async (req, res) => {
       `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
     );
 
-    if (listDocument.status === 200 || listDocument.status === 201) {
-      for (const doc of listDocument.data?.results || []) {
-        try {
-          const documentExist = await Documents.findOne({
-            projectId: req.body.domain,
-            documentId: doc?.id,
-          });
+    console.log(listDocument);
 
-          if (documentExist) {
-            for (const sl of doc?.data?.slices || []) {
-              const sliceExist = await Slices.findOne({
-                slideId: sl?.id,
-                documentId: doc?.id,
-                projectId: req.body.domain,
-              });
+    // if (listDocument.status === 200 || listDocument.status === 201) {
+    //   for (const doc of listDocument.data?.results || []) {
+    //     try {
+    //       const documentExist = await Documents.findOne({
+    //         projectId: req.body.domain,
+    //         documentId: doc?.id,
+    //       });
 
-              if (!sliceExist) {
-                const data = new Slices({
-                  projectId: req.body.domain,
-                  documentId: doc?.id,
-                  sliceId: sl?.id,
-                  thumnail: "_",
-                  detail: {},
-                });
-                const is = await data.save();
-              }
-            }
-            continue;
-          }
+    //       if (documentExist) {
+    //         for (const sl of doc?.data?.slices || []) {
+    //           const sliceExist = await Slices.findOne({
+    //             slideId: sl?.id,
+    //             documentId: doc?.id,
+    //             projectId: req.body.domain,
+    //           });
 
-          const data = new Documents({
-            projectId: req.body.domain,
-            documentId: doc?.id,
-            documentName: formatString(doc?.uid),
-            thumnail: "_",
-            layoutJson: {},
-          });
-          await data.save();
-        } catch (error) {
-          console.error(`Error processing document: ${error.message}`);
-        }
-      }
-    }
+    //           if (!sliceExist) {
+    //             const data = new Slices({
+    //               projectId: req.body.domain,
+    //               documentId: doc?.id,
+    //               sliceId: sl?.id,
+    //               thumnail: "_",
+    //               detail: {},
+    //             });
+    //             await data.save();
+    //           }
+    //         }
+    //         continue;
+    //       }
+
+    //       const data = new Documents({
+    //         projectId: req.body.domain,
+    //         documentId: doc?.id,
+    //         documentName: formatString(doc?.uid),
+    //         thumnail: "_",
+    //         layoutJson: {},
+    //       });
+    //       await data.save();
+    //     } catch (error) {
+    //       console.error(`Error processing document: ${error.message}`);
+    //     }
+    //   }
+    // }
   };
 
   try {
