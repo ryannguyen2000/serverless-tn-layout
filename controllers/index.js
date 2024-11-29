@@ -329,11 +329,15 @@ const getDocument = async (req, res) => {
   try {
     await connectToDb();
     if (dId && !pId) {
+      console.log("RUN HERE 1");
       const data = await Documents.findOne({documentId: dId});
       return res.json(data);
     }
     if (!dId && pId) {
-      const data = await Documents.find({projectId: pId}).populate("projectId");
+      console.log("RUN HERE 2");
+
+      const data = await Documents.find({projectId: pId});
+
       return res.json(data);
     }
     const data = await Documents.find();
