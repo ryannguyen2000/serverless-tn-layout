@@ -406,51 +406,51 @@ const webhookPublishTypePage = async (req, res) => {
       `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
     );
 
-    console.log("data: " + JSON.stringify(listDocument.data));
+    if (listDocument.status === 200 || listDocument.status === 201) {
+      console.log("data: " + JSON.stringify(listDocument.data));
+      for (const doc of listDocument.data?.results || []) {
+        try {
+          const documentExist = await Documents.findOne({
+            projectId: req.body.domain,
+            documentId: doc?.id,
+          });
 
-    // if (listDocument.status === 200 || listDocument.status === 201) {
-    //   for (const doc of listDocument.data?.results || []) {
-    //     try {
-    //       const documentExist = await Documents.findOne({
-    //         projectId: req.body.domain,
-    //         documentId: doc?.id,
-    //       });
+          console.log("doc: " + doc);
+          console.log("docExist: " + documentExist);
+          if (documentExist) {
+            const sliceList = await Slices.find();
+            const missingItems = doc?.data?.slices.filter(
+              (docSlice) =>
+                !sliceList.some((slice) => slice.sliceId === docSlice.id)
+            );
+            console.log("missItem: " + missingItems);
 
-    //       if (documentExist) {
-    //         for (const sl of doc?.data?.slices || []) {
-    //           const sliceExist = await Slices.findOne({
-    //             slideId: sl?.id,
-    //             documentId: doc?.id,
-    //             projectId: req.body.domain,
-    //           });
+            if (!missingItems) {
+              const data = new Slices({
+                projectId: req.body.domain,
+                documentId: doc?.id,
+                sliceId: missingItems?.id,
+                thumnail: "_",
+                detail: {},
+              });
+              await data.save();
+            }
+            continue;
+          }
 
-    //           if (!sliceExist) {
-    //             const data = new Slices({
-    //               projectId: req.body.domain,
-    //               documentId: doc?.id,
-    //               sliceId: sl?.id,
-    //               thumnail: "_",
-    //               detail: {},
-    //             });
-    //             await data.save();
-    //           }
-    //         }
-    //         continue;
-    //       }
-
-    //       const data = new Documents({
-    //         projectId: req.body.domain,
-    //         documentId: doc?.id,
-    //         documentName: formatString(doc?.uid),
-    //         thumnail: "_",
-    //         layoutJson: {},
-    //       });
-    //       await data.save();
-    //     } catch (error) {
-    //       console.error(`Error processing document: ${error.message}`);
-    //     }
-    //   }
-    // }
+          const data = new Documents({
+            projectId: req.body.domain,
+            documentId: doc?.id,
+            documentName: formatString(doc?.uid),
+            thumnail: "_",
+            layoutJson: {},
+          });
+          await data.save();
+        } catch (error) {
+          console.error(`Error processing document: ${error.message}`);
+        }
+      }
+    }
   };
 
   try {
