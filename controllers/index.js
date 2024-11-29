@@ -446,6 +446,24 @@ const webhookPublishTypePage = async (req, res) => {
             layoutJson: {},
           });
           await data.save();
+
+          const sliceList = await Slices.find();
+          const missingItems = doc?.data?.slices.filter(
+            (docSlice) =>
+              !sliceList.some((slice) => slice.sliceId === docSlice.id)
+          );
+          console.log("missItem: " + JSON.stringify(missingItems));
+
+          if (missingItems && missingItems.length > 0) {
+            const list = missingItems.map((missingItem) => ({
+              projectId: req.body.domain,
+              documentId: doc?.id,
+              sliceId: missingItem?.id,
+              thumnail: "_",
+              detail: {},
+            }));
+            await Slices.insertMany(list);
+          }
         } catch (error) {
           console.error(`Error processing document: ${error.message}`);
         }
