@@ -415,25 +415,25 @@ const webhookPublishTypePage = async (req, res) => {
             documentId: doc?.id,
           });
 
-          console.log("doc: " + doc);
-          console.log("docExist: " + documentExist);
+          console.log("doc: " + JSON.stringify(doc));
+          console.log("docExist: " + JSON.stringify(documentExist));
           if (documentExist) {
             const sliceList = await Slices.find();
             const missingItems = doc?.data?.slices.filter(
               (docSlice) =>
                 !sliceList.some((slice) => slice.sliceId === docSlice.id)
             );
-            console.log("missItem: " + missingItems);
+            console.log("missItem: " + JSON.stringify(missingItems));
 
-            if (!missingItems) {
-              const data = new Slices({
+            if (missingItems && missingItems.length > 0) {
+              const list = missingItems.map((missingItem) => ({
                 projectId: req.body.domain,
                 documentId: doc?.id,
-                sliceId: missingItems?.id,
+                sliceId: missingItem?.id,
                 thumnail: "_",
                 detail: {},
-              });
-              await data.save();
+              }));
+              await Slices.insertMany(list);
             }
             continue;
           }
