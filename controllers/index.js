@@ -168,13 +168,13 @@ const createProject = async (req, res) => {
 // #region update route ===========================================================================================================================================================
 
 const updateSlices = async (req, res) => {
-  const {slideId} = req.body;
+  const {sliceId} = req.body;
   try {
     await connectToDb();
     if (!req.body) {
       return res.status(400).json({error: "Invalid request body"});
     }
-    const result = await Slices.updateOne({sliceId: slideId}, {$set: req.body});
+    const result = await Slices.updateOne({sliceId: sliceId}, {$set: req.body});
     if (result.matchedCount === 0) {
       return res.status(404).json({error: "Slices not found"});
     }
