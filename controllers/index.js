@@ -333,7 +333,7 @@ const getDocument = async (req, res) => {
     if (!dId && pId) {
       console.log("RUN HERE 2");
 
-      const data = await Documents.find({projectId: pId}).populate("projectId");
+      const data = await Documents.find({projectId: pId});
 
       return res.json(data);
     }
