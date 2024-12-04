@@ -337,8 +337,7 @@ const getDocument = async (req, res) => {
 
       return res.json(data);
     }
-    const data = await Documents.find();
-    return res.json(data);
+    return res.status(200).json(null);
   } catch (error) {
     res.status(500).json({
       error: "Failed to execute request fetch data",
