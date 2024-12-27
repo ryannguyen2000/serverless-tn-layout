@@ -15,12 +15,9 @@ dotenv.config();
 // #region cloudinary config =================================================================================================================================================
 
 cloudinary.config({
-  // cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  // api_key: process.env.CLOUDINARY_API_KEY,
-  // api_secret: process.env.CLOUDINARY_API_SECRET,
-  cloud_name: "dubi5n4bw",
-  api_key: "324984538927484",
-  api_secret: "seNZIgldYlZAf75wC0k1Qra9HwY",
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 // #endregion
 
@@ -31,7 +28,7 @@ const connectToDb = async () => {
     return;
   }
 
-  await mongoose.connect("mongodb+srv://tompojson:7aS6XyxiZwk1YMzX@cluster0.jzkou.mongodb.net/tn_layout_tool?retryWrites=true&w=majority&appName=Cluster0", {
+  await mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
