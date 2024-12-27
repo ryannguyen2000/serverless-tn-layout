@@ -348,22 +348,26 @@ const getDocument = async (req, res) => {
 
 const getProject = async (req, res) => {
   const { id } = req.query;
-  try {
-    const envvvv = await connectToDb();
-    console.log(envvvv);
+
+  res.json({
+    envvvv: process.env.MONGO_URI
+  })
+  // try {
+  //   const envvvv = await connectToDb();
+  //   console.log("Check Bao", envvvv);
     
-    if (id) {
-      const data = await Projects.findOne({ projectId: id });
-      res.json(data);
-    }
-    const data = await Projects.find();
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({
-      error: "Failed to execute request fetch data",
-      details: error.message,
-    });
-  }
+  //   if (id) {
+  //     const data = await Projects.findOne({ projectId: id });
+  //     res.json(data);
+  //   }
+  //   const data = await Projects.find();
+  //   res.json(data);
+  // } catch (error) {
+  //   res.status(500).json({
+  //     error: "Failed to execute request fetch data",
+  //     details: error.message,
+  //   });
+  // }
 };
 // #endregion
 
