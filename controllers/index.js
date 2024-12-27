@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
-import {Documents, Projects, Slices} from "../models/index.js";
-import {v2 as cloudinary} from "cloudinary";
+import { Documents, Projects, Slices } from "../models/index.js";
+import { v2 as cloudinary } from "cloudinary";
 import axios from "axios";
 import {
   extractVariantAndId,
   formatString,
   processString,
 } from "../utils/index.js";
-import {io} from "../app.js";
+import { io } from "../app.js";
 
 // #region cloudinary config =================================================================================================================================================
 
@@ -38,7 +38,7 @@ const createSlices = async (req, res) => {
   try {
     await connectToDb();
     if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
 
     if (Array.isArray(req.body)) {
@@ -86,14 +86,14 @@ const createDocument = async (req, res) => {
     await connectToDb();
 
     if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
 
-    const {projectId, documentId, documentName, layoutJson, thumnail} =
+    const { projectId, documentId, documentName, layoutJson, thumnail } =
       req.body;
 
     if (!projectId || !documentId || !documentName) {
-      return res.status(400).json({error: "Missing required fields"});
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
     const documentChecker = await Documents.findOneAndUpdate(
@@ -132,7 +132,7 @@ const createProject = async (req, res) => {
   try {
     await connectToDb();
     if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
     const projectChecker = await Projects.findOneAndUpdate(
       {
@@ -168,17 +168,17 @@ const createProject = async (req, res) => {
 // #region update route ===========================================================================================================================================================
 
 const updateSlices = async (req, res) => {
-  const {sliceId} = req.body;
+  const { sliceId } = req.body;
   try {
     await connectToDb();
     if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
-    const result = await Slices.updateOne({sliceId: sliceId}, {$set: req.body});
+    const result = await Slices.updateOne({ sliceId: sliceId }, { $set: req.body });
     if (result.matchedCount === 0) {
-      return res.status(404).json({error: "Slices not found"});
+      return res.status(404).json({ error: "Slices not found" });
     }
-    res.json({message: "Slices updated"});
+    res.json({ message: "Slices updated" });
   } catch (error) {
     res.status(500).json({
       error: "Failed to execute request update slices",
@@ -188,22 +188,22 @@ const updateSlices = async (req, res) => {
 };
 
 const updateDocument = async (req, res) => {
-  const {projectId, documentId} = req.body;
+  const { projectId, documentId } = req.body;
   try {
     await connectToDb();
     if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
     const result = await Documents.updateOne(
-      {documentId: documentId, projectId: projectId},
+      { documentId: documentId, projectId: projectId },
       {
         $set: req.body,
       }
     );
     if (result.matchedCount === 0) {
-      return res.status(404).json({error: "Document not found"});
+      return res.status(404).json({ error: "Document not found" });
     }
-    res.json({message: "Document updated"});
+    res.json({ message: "Document updated" });
   } catch (error) {
     res.status(500).json({
       error: "Failed to execute request update document",
@@ -212,17 +212,17 @@ const updateDocument = async (req, res) => {
   }
 };
 const updateProject = async (req, res) => {
-  const {id} = req.body;
+  const { id } = req.body;
   try {
     await connectToDb();
     if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
-    const result = await Projects.updateOne({projectId: id}, {$set: req.body});
+    const result = await Projects.updateOne({ projectId: id }, { $set: req.body });
     if (result.matchedCount === 0) {
-      return res.status(404).json({error: "Project not found"});
+      return res.status(404).json({ error: "Project not found" });
     }
-    res.json({message: "Project updated"});
+    res.json({ message: "Project updated" });
   } catch (error) {
     res.status(500).json({
       error: "Failed to execute request update project",
@@ -235,20 +235,20 @@ const updateProject = async (req, res) => {
 // #region delete route ==================================================================================================================================================
 
 const deleteSlices = async (req, res) => {
-  const {projectId, documentId} = req.params;
+  const { projectId, documentId } = req.params;
   try {
     await connectToDb();
     if (!projectId && !documentId) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
     const result = await Slices.deleteMany({
       projectId: projectId,
       documentId: documentId,
     });
     if (result.deletedCount === 0) {
-      return res.status(404).json({error: "Slices not found"});
+      return res.status(404).json({ error: "Slices not found" });
     }
-    res.json({message: "Slices deleted"});
+    res.json({ message: "Slices deleted" });
   } catch (error) {
     res.status(500).json({
       error: "Failed to execute request delete slices",
@@ -258,17 +258,17 @@ const deleteSlices = async (req, res) => {
 };
 
 const deleteDocument = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     await connectToDb();
     if (!id) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
-    const result = await Documents.deleteOne({documentId: id});
+    const result = await Documents.deleteOne({ documentId: id });
     if (result.deletedCount === 0) {
-      return res.status(404).json({error: "Document not found"});
+      return res.status(404).json({ error: "Document not found" });
     }
-    res.json({message: "Document deleted"});
+    res.json({ message: "Document deleted" });
   } catch (error) {
     res.status(500).json({
       error: "Failed to execute request delete document",
@@ -277,17 +277,17 @@ const deleteDocument = async (req, res) => {
   }
 };
 const deleteProject = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     await connectToDb();
     if (!id) {
-      return res.status(400).json({error: "Invalid request body"});
+      return res.status(400).json({ error: "Invalid request body" });
     }
-    const result = await Projects.deleteOne({projectId: id});
+    const result = await Projects.deleteOne({ projectId: id });
     if (result.deletedCount === 0) {
-      return res.status(404).json({error: "Project not found"});
+      return res.status(404).json({ error: "Project not found" });
     }
-    res.json({message: "Project deleted"});
+    res.json({ message: "Project deleted" });
   } catch (error) {
     res.status(500).json({
       error: "Failed to execute request delete project",
@@ -300,15 +300,15 @@ const deleteProject = async (req, res) => {
 // #region get route ==================================================================================================================================================
 
 const getSlices = async (req, res) => {
-  const {pId, dId, slideId} = req.query;
+  const { pId, dId, slideId } = req.query;
   try {
     await connectToDb();
     if (pId && dId) {
-      const data = await Slices.find({projectId: pId, documentId: dId});
+      const data = await Slices.find({ projectId: pId, documentId: dId });
       return res.json(data);
     }
     if (!pId && !dId && slideId) {
-      const data = await Slices.findOne({slideId: slideId, documentId: dId});
+      const data = await Slices.findOne({ slideId: slideId, documentId: dId });
       return res.json(data);
     }
     const data = await Slices.find();
@@ -322,18 +322,18 @@ const getSlices = async (req, res) => {
 };
 
 const getDocument = async (req, res) => {
-  const {dId, pId} = req.query;
+  const { dId, pId } = req.query;
   try {
     await connectToDb();
     if (dId && !pId) {
       console.log("RUN HERE 1");
-      const data = await Documents.findOne({documentId: dId});
+      const data = await Documents.findOne({ documentId: dId });
       return res.json(data);
     }
     if (!dId && pId) {
       console.log("RUN HERE 2");
 
-      const data = await Documents.find({projectId: pId});
+      const data = await Documents.find({ projectId: pId });
 
       return res.json(data);
     }
@@ -347,11 +347,13 @@ const getDocument = async (req, res) => {
 };
 
 const getProject = async (req, res) => {
-  const {id} = req.query;
+  const { id } = req.query;
   try {
-    await connectToDb();
+    const envvvv = await connectToDb();
+    console.log(envvvv);
+    
     if (id) {
-      const data = await Projects.findOne({projectId: id});
+      const data = await Projects.findOne({ projectId: id });
       res.json(data);
     }
     const data = await Projects.find();
@@ -369,7 +371,7 @@ const getProject = async (req, res) => {
 const uploadImage = async (req, res) => {
   const base64Regex =
     /^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,([A-Za-z0-9+/=]+)$/;
-  const {image} = req.body;
+  const { image } = req.body;
   if (!image) {
     return res.status(400).send("No image file uploaded");
   }
@@ -390,9 +392,9 @@ const uploadImage = async (req, res) => {
       message: "Image uploaded successfully",
       imageUrl: result.secure_url,
     });
-    res.send({imageUrl});
+    res.send({ imageUrl });
   } catch (error) {
-    res.send({error: error.message});
+    res.send({ error: error.message });
   }
 };
 // #endregion
@@ -493,7 +495,7 @@ const webhookPublishTypePage = async (req, res) => {
       await ScanDocument();
       io.emit("webhook-data", "active");
 
-      return res.status(200).json({message: "Webhook success"});
+      return res.status(200).json({ message: "Webhook success" });
     }
 
     return res.status(400).send("Webhook error: missing body");
