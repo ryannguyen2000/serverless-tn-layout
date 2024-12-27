@@ -350,7 +350,7 @@ const getProject = async (req, res) => {
   const { id } = req.query;
 
   res.json({
-    envvvv: process.env.MONGO_URI
+    envvvv: "Hallo"
   })
   // try {
   //   const envvvv = await connectToDb();
