@@ -349,7 +349,7 @@ const getDocument = async (req, res) => {
 const getProject = async (req, res) => {
   const { id } = req.query;
 
-  res.json({
+  console.log('Hallo', {
     envvvv: "Hallo",
     variables: {
       FE_HOST_3: process.env.FE_HOST_3,
@@ -364,23 +364,25 @@ const getProject = async (req, res) => {
       API_ENVIRONENT_VARIABLE_CLOUNDINARY: process.env.API_ENVIRONENT_VARIABLE_CLOUNDINARY,
 
     }
-  })
-  // try {
-  //   const envvvv = await connectToDb();
-  //   console.log("Check Bao", envvvv);
+  });
 
-  //   if (id) {
-  //     const data = await Projects.findOne({ projectId: id });
-  //     res.json(data);
-  //   }
-  //   const data = await Projects.find();
-  //   res.json(data);
-  // } catch (error) {
-  //   res.status(500).json({
-  //     error: "Failed to execute request fetch data",
-  //     details: error.message,
-  //   });
-  // }
+
+  try {
+    const envvvv = await connectToDb();
+    console.log("Check Bao", envvvv);
+
+    if (id) {
+      const data = await Projects.findOne({ projectId: id });
+      res.json(data);
+    }
+    const data = await Projects.find();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to execute request fetch data",
+      details: error.message,
+    });
+  }
 };
 // #endregion
 
