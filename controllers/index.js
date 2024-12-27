@@ -8,13 +8,19 @@ import {
   processString,
 } from "../utils/index.js";
 import { io } from "../app.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // #region cloudinary config =================================================================================================================================================
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  // cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  // api_key: process.env.CLOUDINARY_API_KEY,
+  // api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: "dubi5n4bw",
+  api_key: "324984538927484",
+  api_secret: "seNZIgldYlZAf75wC0k1Qra9HwY",
 });
 // #endregion
 
@@ -348,25 +354,6 @@ const getDocument = async (req, res) => {
 
 const getProject = async (req, res) => {
   const { id } = req.query;
-
-  console.log('Hallo', {
-    envvvv: "Hallo",
-    variables: {
-      FE_HOST_3: process.env.FE_HOST_3,
-      FE_HOST_4: process.env.FE_HOST_4,
-      FE_HOST: process.env.FE_HOST,
-      FE_HOST_2: process.env.FE_HOST_2,
-      DB_NAME: process.env.DB_NAME,
-      MONGO_URI: process.env.MONGO_URI,
-      CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
-      CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
-      CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
-      API_ENVIRONENT_VARIABLE_CLOUNDINARY: process.env.API_ENVIRONENT_VARIABLE_CLOUNDINARY,
-
-    }
-  });
-
-
   try {
     const envvvv = await connectToDb();
     console.log("Check Bao", envvvv);

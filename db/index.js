@@ -7,7 +7,7 @@ export const connectToDb = async () => {
       return mongoose.connection;
     }
 
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect("mongodb+srv://tompojson:7aS6XyxiZwk1YMzX@cluster0.jzkou.mongodb.net/tn_layout_tool?retryWrites=true&w=majority&appName=Cluster0", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       ssl: true,
