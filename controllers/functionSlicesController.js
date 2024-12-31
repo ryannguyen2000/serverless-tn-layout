@@ -10,12 +10,9 @@ export const createFunctionSlice = async (req, res) => {
     const functionSlicesChecker = await FunctionSlices.findOneAndUpdate(
       {
         sliceId: req.body.sliceId,
-        functions: req.body.functions,
-        createdAt: new Date()
       },
       {
         $set: {
-          // sliceId: req.body.sliceId,
           functions: req.body.functions,
           createdAt: new Date()
         }
@@ -27,8 +24,8 @@ export const createFunctionSlice = async (req, res) => {
     )
     return res.status(201).json({
       message: "Success",
-      pid: functionSlicesChecker.sliceId,
-      did: functionSlicesChecker.functions,
+      sliceId: functionSlicesChecker.sliceId,
+      functions: functionSlicesChecker.functions,
     });
   } catch (error) {
     res.status(500).json({
