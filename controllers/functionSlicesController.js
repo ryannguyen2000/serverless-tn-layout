@@ -43,7 +43,7 @@ export const getFunctionsSlice = async (req, res) => {
   try {
     await connectToDb();
     if (sliceId) {
-      const result = await FunctionSlices.find({ sliceId })
+      const result = await FunctionSlices.findOne({ sliceId })
       res.json({
         result,
         message: "Get functions successfully!"
