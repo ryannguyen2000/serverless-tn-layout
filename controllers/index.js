@@ -22,8 +22,8 @@ cloudinary.config({
 // #endregion
 
 // #region Connect to MongoDB using Mongoose ===================================================================================================================================
-
-const connectToDb = async () => {
+ 
+export const connectToDb = async () => {
   if (mongoose.connections[0].readyState) {
     return;
   }

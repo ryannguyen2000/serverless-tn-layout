@@ -14,6 +14,7 @@ import {
   updateSlices,
   uploadImage,
 } from "../controllers/index.js";
+import { createFunctionSlices } from "../controllers/functionSlicesController.js";
 
 export const router = express.Router();
 
@@ -39,3 +40,6 @@ router.delete("/projects/:id", deleteProject);
 
 // image upload
 router.post("/upload", uploadImage);
+
+// create function slice
+router.post("/functions", createFunctionSlices)
