@@ -14,7 +14,7 @@ import {
   updateSlices,
   uploadImage,
 } from "../controllers/index.js";
-import { createFunctionSlices } from "../controllers/functionSlicesController.js";
+import { createFunctionSlice, getFunctionsSlice, updateFunctionSlice } from "../controllers/functionSlicesController.js";
 
 export const router = express.Router();
 
@@ -22,16 +22,19 @@ export const router = express.Router();
 router.get("/slices", getSlices);
 router.get("/documents", getDocument);
 router.get("/projects", getProject);
+router.get("/functions/:sliceId", getFunctionsSlice)
 
 // create routes
 router.post("/slices", createSlices);
 router.post("/documents", createDocument);
 router.post("/projects", createProject);
+router.post("/functions", createFunctionSlice)
 
 // update routes
 router.put("/slices", updateSlices);
 router.put("/documents", updateDocument);
 router.put("/projects", updateProject);
+router.put("/functions", updateFunctionSlice)
 
 // delete routes
 router.delete("/slices/:projectId/:documentId", deleteSlices);
@@ -40,6 +43,3 @@ router.delete("/projects/:id", deleteProject);
 
 // image upload
 router.post("/upload", uploadImage);
-
-// create function slice
-router.post("/functions", createFunctionSlices)
