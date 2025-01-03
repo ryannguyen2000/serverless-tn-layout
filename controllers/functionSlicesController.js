@@ -1,15 +1,15 @@
-import { FunctionSlices } from "../models/index.js";
+import { FunctionDocuments } from "../models/index.js";
 import dotenv from "dotenv";
 import { connectToDb } from "./index.js";
 
 dotenv.config();
 
-export const createFunctionSlice = async (req, res) => {
+export const createFunctionDocument = async (req, res) => {
   try {
     await connectToDb();
-    const functionSlicesChecker = await FunctionSlices.findOneAndUpdate(
+    const functionDocumentChecker = await FunctionDocuments.findOneAndUpdate(
       {
-        sliceId: req.body.sliceId,
+        documentId: req.body.documentId,
       },
       {
         $set: {
@@ -24,8 +24,8 @@ export const createFunctionSlice = async (req, res) => {
     )
     return res.status(201).json({
       message: "Success",
-      sliceId: functionSlicesChecker.sliceId,
-      functions: functionSlicesChecker.functions,
+      documentId: functionDocumentChecker.documentId,
+      functions: functionDocumentChecker.functions,
     });
   } catch (error) {
     res.status(500).json({
@@ -35,12 +35,12 @@ export const createFunctionSlice = async (req, res) => {
   }
 }
 
-export const getFunctionsSlice = async (req, res) => {
-  const { sliceId } = req.params
+export const getFunctionsDocument = async (req, res) => {
+  const { documentId } = req.params
   try {
     await connectToDb();
-    if (sliceId) {
-      const result = await FunctionSlices.findOne({ sliceId })
+    if (documentId) {
+      const result = await FunctionDocuments.findOne({ documentId })
       res.json({
         result,
         message: "Get functions successfully!"
@@ -55,20 +55,20 @@ export const getFunctionsSlice = async (req, res) => {
 }
 
 export const updateFunctionSlice = async (req, res) => {
-  const { sliceId } = req.body
+  const { documentId } = req.body
   try {
     await connectToDb();
     if (!req.body) {
       return res.status(400).json({ error: "Invalid request body" });
     }
-    const result = await FunctionSlices.updateOne(
-      { sliceId },
+    const result = await FunctionDocuments.updateOne(
+      { documentId },
       {
         $set: req.body,
       }
     );
     if (result.matchedCount === 0) {
-      return res.status(404).json({ error: "Functions slice not found" });
+      return res.status(404).json({ error: "Functions document not found" });
     }
     res.json({ message: "Functions updated" });
   } catch (error) {

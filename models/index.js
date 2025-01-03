@@ -36,8 +36,8 @@ const slicesSchema = new mongoose.Schema({
   },
 });
 
-const functionSlicesSchema = new mongoose.Schema({
-  sliceId: { type: String, required: true, unique: true },
+const functionDocumentSchema = new mongoose.Schema({
+  documentId: { type: String, required: true, unique: true },
   functions: { type: String, require: true },
   createdAt: { type: Date, default: Date.now }
 })
@@ -45,6 +45,6 @@ const functionSlicesSchema = new mongoose.Schema({
 const Documents = mongoose.model("Documents", documentsSchema);
 const Projects = mongoose.model("Projects", projectsSchema);
 const Slices = mongoose.model("Slices", slicesSchema);
-const FunctionSlices = mongoose.model("FunctionSlices", functionSlicesSchema)
+const FunctionDocuments = mongoose.model("FunctionDocuments", functionDocumentSchema)
 
-export { Documents, Projects, Slices, FunctionSlices };
+export { Documents, Projects, Slices, FunctionDocuments };
