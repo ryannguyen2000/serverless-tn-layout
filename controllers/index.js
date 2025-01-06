@@ -22,7 +22,7 @@ cloudinary.config({
 // #endregion
 
 // #region Connect to MongoDB using Mongoose ===================================================================================================================================
- 
+
 export const connectToDb = async () => {
   if (mongoose.connections[0].readyState) {
     return;
@@ -375,6 +375,7 @@ const uploadImage = async (req, res) => {
   const base64Regex =
     /^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,([A-Za-z0-9+/=]+)$/;
   const { image } = req.body;
+
   if (!image) {
     return res.status(400).send("No image file uploaded");
   }
@@ -391,13 +392,12 @@ const uploadImage = async (req, res) => {
       folder: "uploads",
     });
 
-    res.json({
+    return res.json({
       message: "Image uploaded successfully",
       imageUrl: result.secure_url,
     });
-    res.send({ imageUrl });
   } catch (error) {
-    res.send({ error: error.message });
+    return res.send({ error: error.message });
   }
 };
 // #endregion
