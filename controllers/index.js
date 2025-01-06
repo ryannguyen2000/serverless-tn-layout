@@ -5,7 +5,6 @@ import axios from "axios";
 import {
   extractVariantAndId,
   formatString,
-  processString,
 } from "../utils/index.js";
 import { io } from "../app.js";
 import dotenv from "dotenv";

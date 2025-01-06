@@ -8,6 +8,7 @@ import { extractVariantAndId } from "./utils/index.js";
 import axios from "axios";
 import { webhook } from "./webhooks/index.js";
 import { Server } from "socket.io";
+import { componentsConfigRoutes } from "./routes/componentsConfigRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -24,7 +25,8 @@ app.use(
 const server = http.createServer(app);
 
 app.use(bodyParser.json({ limit: "10mb" }));
-app.use("/api", router);
+// app.use("/api", router );
+app.use("/api/components-config", componentsConfigRoutes);
 app.use(webhook);
 
 export const io = new Server(server, {
