@@ -6,7 +6,7 @@ const projectsSchema = new mongoose.Schema(
     projectName: { type: String, required: true },
     projectUrl: { type: String, required: true },
     websiteUrl: { type: String, required: true },
-    thumnail: { type: String, required: true },
+    thumbnail: { type: String, required: true },
   },
   { timestamps: true }
 );
@@ -16,7 +16,7 @@ const documentsSchema = new mongoose.Schema(
     projectId: { type: String, required: true, ref: "Projects" },
     documentId: { type: String, required: true, unique: true },
     documentName: { type: String, required: true },
-    thumnail: { type: String, required: true },
+    thumbnail: { type: String, required: true },
     layoutJson: {
       type: mongoose.Schema.Types.Mixed,
       required: true,
@@ -29,7 +29,8 @@ const slicesSchema = new mongoose.Schema({
   sliceId: { type: String, required: true, unique: true },
   projectId: { type: String, required: true, ref: "Projects" },
   documentId: { type: String, required: true, ref: "Documents" },
-  thumnail: { type: String, required: true },
+  thumbnail: { type: String, required: true },
+  imageUrl: { type: String },
   detail: {
     type: mongoose.Schema.Types.Mixed,
     required: true,
