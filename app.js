@@ -25,7 +25,7 @@ app.use(
 const server = http.createServer(app);
 
 app.use(bodyParser.json({ limit: "10mb" }));
-// app.use("/api", router );
+app.use("/api", router );
 app.use("/api/components-config", componentsConfigRoutes);
 app.use(webhook);
 
