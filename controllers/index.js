@@ -351,9 +351,7 @@ const getDocument = async (req, res) => {
 const getProject = async (req, res) => {
   const { id } = req.query;
   try {
-    const envvvv = await connectToDb();
-    console.log("Check Bao", envvvv);
-
+    await connectToDb();
     if (id) {
       const data = await Projects.findOne({ projectId: id });
       res.json(data);

@@ -4,4 +4,4 @@ import { createComponentConfig, getComponentConfig } from "../controllers/compon
 export const componentsConfigRoutes = express.Router();
 
 componentsConfigRoutes.post("/", createComponentConfig);
-componentsConfigRoutes.get("/", getComponentConfig);
+componentsConfigRoutes.get("/:documentId", getComponentConfig);

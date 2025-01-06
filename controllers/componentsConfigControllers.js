@@ -35,6 +35,8 @@ export const createComponentConfig = async (req, res) => {
 
 export const getComponentConfig = async (req, res) => {
   const { documentId } = req.params
+  console.log('documentId', documentId);
+  
   try {
     await connectToDb();
     if (documentId) {
