@@ -61,7 +61,7 @@ const createSlices = async (req, res) => {
           projectId: req.body.projectId,
           documentId: req.body.documentId,
           sliceId: req.body.sliceId,
-          thumnail: req.body.thumnail,
+          thumnbail: req.body.thumbnail,
           detail: typeof req.body.detail === "object" ? req.body.detail : {},
         },
       },
@@ -91,7 +91,7 @@ const createDocument = async (req, res) => {
       return res.status(400).json({ error: "Invalid request body" });
     }
 
-    const { projectId, documentId, documentName, layoutJson, thumnail } =
+    const { projectId, documentId, documentName, layoutJson, thumbnail } =
       req.body;
 
     if (!projectId || !documentId || !documentName) {
@@ -108,7 +108,7 @@ const createDocument = async (req, res) => {
           projectId: projectId,
           documentId: documentId,
           documentName: documentName,
-          thumnail: thumnail,
+          thumbnail: thumbnail,
           layoutJson: layoutJson,
         },
       },
@@ -146,7 +146,7 @@ const createProject = async (req, res) => {
           projectName: req.body.projectName,
           projectUrl: req.body.projectUrl,
           websiteUrl: req.body.websiteUrl,
-          thumnail: req.body.thumnail,
+          thumbnail: req.body.thumbnail,
         },
       },
       {
@@ -432,7 +432,7 @@ const webhookPublishTypePage = async (req, res) => {
                 projectId: req.body.domain,
                 documentId: doc?.id,
                 sliceId: missingItem?.id,
-                thumnail: "_",
+                thumbnail: "",
                 detail: {},
               }));
               await Slices.insertMany(list);
@@ -444,7 +444,7 @@ const webhookPublishTypePage = async (req, res) => {
             projectId: req.body.domain,
             documentId: doc?.id,
             documentName: formatString(doc?.uid),
-            thumnail: "_",
+            thumbnail: "",
             layoutJson: {},
           });
           await data.save();
@@ -461,7 +461,7 @@ const webhookPublishTypePage = async (req, res) => {
               projectId: req.body.domain,
               documentId: doc?.id,
               sliceId: missingItem?.id,
-              thumnail: "_",
+              thumbnail: "",
               detail: {},
             }));
             await Slices.insertMany(list);
@@ -480,7 +480,7 @@ const webhookPublishTypePage = async (req, res) => {
         projectName: formatString(req.body.domain),
         projectUrl: `https://${req.body.domain}.prismic.io`,
         websiteUrl: "_",
-        thumnail: "_",
+        thumbnail: "",
       };
 
       const projectExist = await Projects.findOne({
