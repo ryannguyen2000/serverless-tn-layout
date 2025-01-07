@@ -432,7 +432,7 @@ const webhookPublishTypePage = async (req, res) => {
                 projectId: req.body.domain,
                 documentId: doc?.id,
                 sliceId: missingItem?.id,
-                thumbnail: "",
+                thumbnail: "_",
                 detail: {},
               }));
               await Slices.insertMany(list);
@@ -444,7 +444,7 @@ const webhookPublishTypePage = async (req, res) => {
             projectId: req.body.domain,
             documentId: doc?.id,
             documentName: formatString(doc?.uid),
-            thumbnail: "",
+            thumbnail: "_",
             layoutJson: {},
           });
           await data.save();
@@ -461,7 +461,7 @@ const webhookPublishTypePage = async (req, res) => {
               projectId: req.body.domain,
               documentId: doc?.id,
               sliceId: missingItem?.id,
-              thumbnail: "",
+              thumbnail: "_",
               detail: {},
             }));
             await Slices.insertMany(list);
@@ -480,7 +480,7 @@ const webhookPublishTypePage = async (req, res) => {
         projectName: formatString(req.body.domain),
         projectUrl: `https://${req.body.domain}.prismic.io`,
         websiteUrl: "_",
-        thumbnail: "",
+        thumbnail: "_",
       };
 
       const projectExist = await Projects.findOne({
