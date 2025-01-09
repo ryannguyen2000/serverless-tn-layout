@@ -12,7 +12,9 @@ import {
   updateDocument,
   updateProject,
   updateSlices,
+  upload,
   uploadImage,
+  uploadMedia,
 } from "../controllers/index.js";
 
 export const router = express.Router();
@@ -38,3 +40,4 @@ router.delete("/projects/:id", deleteProject);
 
 // image upload
 router.post("/upload", uploadImage);
+router.post("/uploadMedia", upload.single("media"), uploadMedia);

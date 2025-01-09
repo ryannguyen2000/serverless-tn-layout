@@ -8,6 +8,8 @@ import {
 } from "../utils/index.js";
 import { io } from "../app.js";
 import dotenv from "dotenv";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import multer from "multer";
 
 dotenv.config();
 
@@ -397,6 +399,36 @@ const uploadImage = async (req, res) => {
     return res.send({ error: error.message });
   }
 };
+
+// Configure Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "uploads", // Set the folder in Cloudinary
+    resource_type: "auto", // Automatically detect the resource type (image/video)
+  },
+});
+
+// Configure multer
+const upload = multer({ storage });
+
+const uploadMedia = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No media file uploaded");
+  }
+
+  try {
+    // Cloudinary automatically returns the URL of the uploaded file
+    const { path } = req.file;
+
+    return res.json({
+      message: "Media uploaded successfully",
+      mediaUrl: path,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 // #endregion
 
 // #region Webhooks ===================================================================================================================================
@@ -571,4 +603,6 @@ export {
   webhookPublishTypeNone,
   webhookPublish,
   uploadImage,
+  upload,
+  uploadMedia
 };
