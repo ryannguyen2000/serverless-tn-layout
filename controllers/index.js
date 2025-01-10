@@ -400,35 +400,55 @@ const uploadImage = async (req, res) => {
   }
 };
 
-// Configure Cloudinary
+
+// Configure Cloudinary storage
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: "uploads", // Set the folder in Cloudinary
-    resource_type: "auto", // Automatically detect the resource type (image/video)
+  params: async (req, file) => {
+    const extension = file.originalname.split('.').pop().toLowerCase();
+
+    // Check file type to determine resource type
+    let resourceType = "auto"; // Default to auto-detect
+    if (["mp4", "mov", "avi", "mkv", "webm"].includes(extension)) {
+      resourceType = "video"; // Treat these extensions as video
+    } else if (["gif"].includes(extension)) {
+      resourceType = "image"; // GIFs are treated as images in Cloudinary
+    } else if (["svg", "png", "jpg", "jpeg", "webp"].includes(extension)) {
+      resourceType = "image";
+    }
+
+    return {
+      folder: "uploads", // Set the folder in Cloudinary
+      resource_type: resourceType,
+      format: extension, // Keep original format
+      public_id: file.originalname.split('.')[0], // Optional: Save with original filename (without extension)
+    };
   },
 });
 
 // Configure multer
 const upload = multer({ storage });
 
+// Define the upload endpoint
 const uploadMedia = async (req, res) => {
   if (!req.file) {
     return res.status(400).send("No media file uploaded");
   }
 
   try {
-    // Cloudinary automatically returns the URL of the uploaded file
-    const { path } = req.file;
+    const { path, public_id, resource_type } = req.file;
 
     return res.json({
       message: "Media uploaded successfully",
       mediaUrl: path,
+      publicId: public_id,
+      resourceType: resource_type,
     });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
+
 // #endregion
 
 // #region Webhooks ===================================================================================================================================
