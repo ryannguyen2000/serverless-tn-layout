@@ -21,6 +21,7 @@ const documentsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
       required: true,
     },
+    uid: { type: String, unique: true }
   },
   { timestamps: true }
 );

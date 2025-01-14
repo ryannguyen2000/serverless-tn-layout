@@ -461,7 +461,7 @@ const webhookPublishTypePage = async (req, res) => {
     );
 
     console.log('listDocument', listDocument);
-    
+
 
     if (listDocument.status === 200 || listDocument.status === 201) {
       console.log("data: " + JSON.stringify(listDocument.data));
@@ -501,6 +501,7 @@ const webhookPublishTypePage = async (req, res) => {
             documentName: formatString(doc?.uid),
             thumbnail: "_",
             layoutJson: {},
+            uid: doc?.uid
           });
           await data.save();
 
