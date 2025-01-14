@@ -460,6 +460,9 @@ const webhookPublishTypePage = async (req, res) => {
       `${req.body.apiUrl}/v2/documents/search?ref=${req.body.masterRef}&q=[[at(document.type,"page")]]`
     );
 
+    console.log('listDocument', listDocument);
+    
+
     if (listDocument.status === 200 || listDocument.status === 201) {
       console.log("data: " + JSON.stringify(listDocument.data));
       for (const doc of listDocument.data?.results || []) {
