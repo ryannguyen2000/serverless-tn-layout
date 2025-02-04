@@ -1,17 +1,18 @@
 import { connectToDb } from "./index.js";
-import { ComponentsConfigs } from "../models/index.js";
+import { LayoutJsons } from "../models/layoutJson.js";
 
 
-export const createComponentConfig = async (req, res) => {
+export const createLayoutJson = async (req, res) => {
   try {
     await connectToDb();
-    const functionDocumentChecker = await ComponentsConfigs.findOneAndUpdate(
+    const layoutJsonChecker = await LayoutJsons.findOneAndUpdate(
       {
         documentId: req.body.documentId,
       },
       {
         $set: {
-          component: req.body.component,
+          layoutJson: req.body.layoutJson,
+          documentName: req.body.documentName,
           createdAt: new Date()
         }
       },
@@ -21,9 +22,10 @@ export const createComponentConfig = async (req, res) => {
       }
     )
     return res.status(201).json({
-      message: "Success",
-      documentId: functionDocumentChecker.documentId,
-      component: functionDocumentChecker.component,
+      message: "Success!",
+      documentId: layoutJsonChecker.documentId,
+      documentName: req.body.documentName,
+      layoutJson: layoutJsonChecker.layoutJson,
     });
   } catch (error) {
     res.status(500).json({
@@ -33,17 +35,15 @@ export const createComponentConfig = async (req, res) => {
   }
 };
 
-export const getComponentConfig = async (req, res) => {
+export const getLayoutJson = async (req, res) => {
   const { documentId } = req.params
-  console.log('documentId', documentId);
-  
   try {
     await connectToDb();
     if (documentId) {
-      const result = await ComponentsConfigs.findOne({ documentId })
+      const result = await LayoutJsons.findOne({ documentId })
       res.json({
         result,
-        message: "Get component successfully!"
+        message: "Get layout successfully!"
       })
     }
   } catch (error) {

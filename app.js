@@ -4,11 +4,10 @@ import http from "http";
 import dotenv from "dotenv";
 import cors from "cors";
 import { router } from "./routes/index.js";
-import { extractVariantAndId } from "./utils/index.js";
-import axios from "axios";
 import { webhook } from "./webhooks/index.js";
 import { Server } from "socket.io";
-import { componentsConfigRoutes } from "./routes/componentsConfigRoutes.js";
+import { componentJsonRoutes } from "./routes/componentJsonRoutes.js";
+import { layoutsonRoutes } from "./routes/layoutJsonRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -25,8 +24,9 @@ app.use(
 const server = http.createServer(app);
 
 app.use(bodyParser.json({ limit: "10mb" }));
-app.use("/api", router );
-app.use("/api/components-config", componentsConfigRoutes);
+app.use("/api", router);
+app.use("/api/componentJsons", componentJsonRoutes);
+app.use("/api/layoutJsons", layoutsonRoutes);
 app.use(webhook);
 
 export const io = new Server(server, {
