@@ -4,4 +4,4 @@ import { createComponentJson, getComponentJson } from "../controllers/componentJ
 export const componentJsonRoutes = express.Router();
 
 componentJsonRoutes.post("/", createComponentJson);
-componentJsonRoutes.get("/:componentJsonId", getComponentJson);
+componentJsonRoutes.get("/:documentId", getComponentJson);

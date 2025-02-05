@@ -37,8 +37,6 @@ export const createComponentJson = async (req, res) => {
 
 export const getComponentJson = async (req, res) => {
   const { documentId } = req.params
-  console.log('documentId', documentId);
-
   try {
     await connectToDb();
     if (documentId) {
